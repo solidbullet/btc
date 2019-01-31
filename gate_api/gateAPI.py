@@ -1,11 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import math
+
 '''
 Provide the GateIO class to abstract web interaction
 '''
-API_QUERY_URL = 'data.gateio.io'
-API_TRADE_URL = 'api.gateio.io'
 
 from HttpUtil import getSign, httpGet, httpPost
 
@@ -129,26 +127,3 @@ class GateIO:
         URL = "/api2/1/private/withdraw"
         params = {'currency': currency, 'amount': amount,'address':address}
         return httpPost(self.__url, URL, params, self.__apiKey, self.__secretKey)
-
-    def get_depth(self,symbol,layer,innerlay=0):
-        depth=self.orderBook(symbol)
-        if depth:
-            if 'asks' in depth and 'bids' in depth:
-                depth['asks']=depth['asks'][::-1]
-                return depth
-
-    def get_symbol_info(self,symbol):
-        marketinfo=self.marketinfo()
-        if marketinfo:
-            #print marketinfo
-            for list in marketinfo['pairs']:
-                if list.keys()[0]==symbol:
-                    symbol_info = {'price_precise': int(list[list.keys()[0]]['decimal_places']),
-                                   'amount_precise': int(math.lgamma(float(list[list.keys()[0]]['min_amount']))/2),
-                                   'minsize': float(list[list.keys()[0]]['min_amount'])}
-                    return symbol_info
-
-if __name__ == '__main__':
-    gate_query = GateIO(API_QUERY_URL, None, None)
-    #depth = gate_query.orderBook('xtz_btc')
-    print gate_query.get_symbol_info('xtz_btc')

@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 # 用于访问OKCOIN 现货REST API
 from HttpMD5Util import buildMySign, httpGet, httpPost
+import time
 
-apikey = ''
-secretkey = ''
+apikey = 'd8fff5ea-5492-407d-acba-eea0dbd11fe5'
+secretkey = '8986CC412927C40D69F217E865BC50E9'
 okcoinRESTURL = 'www.okex.com'
 
 class OKCoinSpot:
@@ -122,12 +123,12 @@ class OKCoinSpot:
         return httpPost(self.__url, ORDER_HISTORY_RESOURCE, params)
 
 
+ok_rest=OKCoinSpot(okcoinRESTURL,apikey,secretkey)
 
-
-
-# ok_rest=OKCoinSpot(okcoinRESTURL,apikey,secretkey)
-# print(ok_rest.ticker('btc_usdt'))
-# print(ok_rest.depth('btc_usdt'))
-# print(ok_rest.userinfo())
+while(True):
+    print(ok_rest.ticker('btc_usdt')['ticker']['last'])
+    time.sleep(2)
+#print(ok_rest.depth('btc_usdt'))
+#print(ok_rest.userinfo())
 # print(ok_rest.order_send('btc_usdt','sell',10000,0.001))
 # print(ok_rest.order_send('btc_usdt','buy',1000,0.001))

@@ -1,4 +1,7 @@
-import httplib
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import http.client
 import urllib
 import json
 import hashlib
@@ -17,7 +20,7 @@ def getSign(params, secretKey):
     return mySign
 
 def httpGet(url, resource, params=''):
-    conn = httplib.HTTPSConnection(url, timeout=10)
+    conn = http.client.HTTPSConnection(url, timeout=10)
     conn.request("GET", resource + '/' + params)
     response = conn.getresponse()
     data = response.read().decode('utf-8')
@@ -30,7 +33,7 @@ def httpPost(url, resource, params, apiKey, secretKey):
             "SIGN":getSign(params, secretKey)
      }
 
-     conn = httplib.HTTPSConnection(url, timeout=10)
+     conn = http.client.HTTPSConnection(url, timeout=10)
 
      tempParams = urllib.parse.urlencode(params) if params else ''
      print(tempParams)

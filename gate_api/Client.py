@@ -5,12 +5,12 @@
 '''
 Provide user specific data and interact with gate.io
 '''
-
+import time
 from gateAPI import GateIO
 
 ## 填写 apiKey APISECRET
-apiKey = 'your api key'
-secretKey = 'your api secret'
+apiKey = 'CD9CB8EB-D1DE-4AF6-BF0F-B4724E9A1A0D'
+secretKey = '1160889547d7cddc7f33432d05a59a4f353030b8840ff3abf3952df947e86ce3'
 ## address
 btcAddress = 'your btc address'
 
@@ -50,14 +50,12 @@ gate_trade = GateIO(API_TRADE_URL, apiKey, secretKey)
 ## Below, use methods that make use of the users keys
 
 # Ticker
-# print(gate_query.ticker('btc_usdt'))
+while(True):
+    print(gate_query.ticker('btc_usdt')['last'])
+    time.sleep(2)
 
 # Market depth of pair
-depth=gate_query.orderBook('xtz_btc')
-for list in depth['asks']:
-    print 111,list
-for list in depth['bids']:
-    print 222,list
+#print(gate_query.orderBook('btc_usdt'))
 
 # Trade History
 # print(gate_query.tradeHistory('btc_usdt'))
