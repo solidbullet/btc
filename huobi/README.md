@@ -1,6 +1,6 @@
 # README
 ## 环境要求
-nodejs 6.0以上版本
+1.成交量突破的时候音乐提醒，因为谷歌不支持audio自动播放，需要配置谷歌服务器：地址栏输入：chrome://flags/#autoplay-policy，autoplay.policy修改为no user gesture  
 
 ## 准备工作
 1. 注册火币账号，在账号安全中心获取uid
