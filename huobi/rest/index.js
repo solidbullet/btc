@@ -1,23 +1,25 @@
 const https = require('https');
+const fs = require('fs');
 
-let symbol = ['eosusdt','btcusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt'];//,'htusdt','bsvusdt','ltcusdt','trxusdt'
-let TO_HTML = [];
-let kl_promise=[];
-for(let i = 0;i <symbol.length;i++){
-    kl_promise.push(getKline(symbol[i]));
-};
-Promise.all(kl_promise).then(function(values) {
 
-    for(let item in values){
-        if(values[item].status == 'error') continue;
-        let ch0 = values[item].ch;
-        let symbol = ch0.slice(7,14);
-        let kline = values[item].data;
-        TO_HTML.push(get_arr(symbol,kline));
-    };
-    console.log(JSON.stringify(TO_HTML)); 
-  });
+// async function get_all () {
+//     let symbol = ['eosusdt','btcusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt'];//,'htusdt','bsvusdt','ltcusdt','trxusdt'
+//     let TO_HTML = [];
+//     let kl_promise=[];
+//     for(let i = 0;i <symbol.length;i++){
+//         kl_promise.push(getKline(symbol[i]));
+//     };
+//     let res = await Promise.all(kl_promise);
+//     return res;
+// }
 
+// get_all().then((res) => {
+//     console.log(res)
+// });
+
+// getKline('btcusdt').then((res)=>{
+//     console.log(res)
+// })
 function getKline(symbol) {
     return new Promise((resolve, reject) => {
         let err = {"status":"error"};
@@ -64,3 +66,30 @@ function get_arr(symbol,kline){ //通过k线序列计算出数组，在前端页
     return data;
 
 }
+
+
+    async function queue(arr) {
+     let res = []
+     for (let fn of arr) {
+       var data= await fn;
+       res.push(data);
+     }
+     return await res
+   }
+   
+   let symbol = ['eosusdt','btcusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt'];//,'htusdt','bsvusdt','ltcusdt','trxusdt'
+   let TO_HTML = [];
+   let kl_promise=[];
+   for(let i = 0;i <symbol.length;i++){
+       kl_promise.push(getKline(symbol[i]));
+   };
+
+   queue(kl_promise)
+     .then(data => {
+        //return  data;
+        console.log(data);
+     })//.then(data=>console.log(data))
+   
+
+
+

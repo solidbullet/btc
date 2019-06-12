@@ -21,14 +21,14 @@ function handle(data) {
             break;
         case 'kline':
             orderbook[symbol] = data.tick;
-            console.log('data', data);
+            // console.log('data', data);
             break;
     }
 }
 
 function subscribe(ws) {
-    var symbols = ['eosusdt'];
-    // var symbols = ['eosusdt','btcusdt','ethusdt','ltcusdt','bsvusdt','trxusdt','xrpusdt','htusdt','iotausdt'];
+    // var symbols = ['eosusdt'];
+    var symbols = ['eosusdt','btcusdt','ethusdt','ltcusdt','bsvusdt','trxusdt','xrpusdt','htusdt','iotausdt'];
     // 订阅深度
     // 谨慎选择合并的深度，ws每次推送全量的深度数据，若未能及时处理容易引起消息堆积并且引发行情延时
     // for (let symbol of symbols) {

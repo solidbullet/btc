@@ -30,11 +30,7 @@
            <th>币种</th>
            <th>当前价格</th>
            <th>前M5收盘价</th>
-<<<<<<< HEAD
            <th>前12根K平均成交量</th>
-=======
-           <th>前平均成交量</th>
->>>>>>> 53151e3b9affb49b7dd075e7da743174672c014d
            <th>前M5成交量</th>
            <th>成交量倍数</th>
         </tr>
@@ -52,7 +48,6 @@
      </tbody>
   </table>
 
-<<<<<<< HEAD
   <table class="table">
   <thead>
      <tr>
@@ -70,8 +65,6 @@
   </tbody>
 </table>
 
-=======
->>>>>>> 53151e3b9affb49b7dd075e7da743174672c014d
     </div>
       <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
       <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
@@ -83,18 +76,14 @@
    var app = angular.module('myApp', []);
    let audio = document.getElementById("qAudio");
 	app.controller('siteCtrl', function($scope, $http,$interval) {
-<<<<<<< HEAD
       $scope.history = {};
 
       
-=======
->>>>>>> 53151e3b9affb49b7dd075e7da743174672c014d
       
 	  $interval(function(){
-		$http.get("http://127.0.0.1:8888/getjson")
+		$http.get("http://127.0.0.1:8080/getjson")
 		  .success(function (response) {
          for(let p in response){  // console.log(p);//   取得是key值 // console.log(obj[p]);//取得是value值
-<<<<<<< HEAD
                if(response[p].bs > 8){ 
 
                   if(audio.paused){
@@ -118,22 +107,12 @@
 
                   // console.log($scope.history);
 
-=======
-               if(response[p].bs > 10 && audio.paused){ 
-                  console.log("触发条件");
-                  audio.load();
-                  audio.play();
->>>>>>> 53151e3b9affb49b7dd075e7da743174672c014d
                }                  
             }
             $scope.data = response;
             // console.log($scope.data);
 		  });//end for http.get
-<<<<<<< HEAD
-	  },1000)// end for interval
-=======
 	  },5000)// end for interval
->>>>>>> 53151e3b9affb49b7dd075e7da743174672c014d
 	  
 	});
 	</script>

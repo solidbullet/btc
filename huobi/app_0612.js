@@ -77,7 +77,7 @@ function check() {
 	}
 	for(let i = 0;i < syms.length;i++)
 	{
-		let N  = 3;
+		let N  = 10;
 		if(data[syms[i]].length == N){
 			data[syms[i]].pop();
 		}
