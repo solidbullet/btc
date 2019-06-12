@@ -2,6 +2,34 @@ const https = require('https');
 const http = require('http');
 const fs= require("fs");
 
+<<<<<<< HEAD
+=======
+
+let get_json = new Promise((resolve,reject) => {
+    
+    let symbol = ['eosusdt','btcusdt','htusdt','bsvusdt','ltcusdt','trxusdt'];
+    let TO_HTML = [];
+    let kl_promise=[];
+    for(let i = 0;i <symbol.length;i++){
+        kl_promise.push(getKline(symbol[i]));
+    };
+    
+    Promise.all(kl_promise).then(function(values) {
+        for(let item in values){
+            let ch0 = values[item].ch;
+            let symbol = ch0.slice(7,14);
+            let kline = values[item].data;
+            // console.log("ch0",ch0);
+            TO_HTML.push(get_arr(symbol,kline));
+            // console.log(get_arr(symbol,kline));
+        };
+        resolve(TO_HTML);
+        // console.log(TO_HTML);
+      });
+    });
+
+
+>>>>>>> 53151e3b9affb49b7dd075e7da743174672c014d
 const server = http.createServer(function(req,res){
 	//设置响应头
 	res.writeHead(200,{"Content-Type":"text/html;charset=UTF-8"})
@@ -16,6 +44,7 @@ const server = http.createServer(function(req,res){
 			res.end(data);
 		})
 
+<<<<<<< HEAD
     }else if(req.url=="/shanzhai.html"){
 		fs.readFile("./shanzhai.html",'utf-8',function(err,data){
             if(err)
@@ -70,6 +99,18 @@ const server = http.createServer(function(req,res){
             console.log(err);
           }
     }
+=======
+		// let html = `<html><head><title>我的第2个 HTML 页面</title></head>		
+		// <body><p>xxxx元素的内容会显示在浏览器中。</p><p></p>
+		// </body>	<script>setTimeout(function(){location.reload()},1000);</script></html>`;
+		// res.end(html);
+	}else if(req.url == "/getjson"){
+        get_json.then(result => {
+            res.end(JSON.stringify(result)); //JSON.stringify(get_json())
+        });
+			
+	}
+>>>>>>> 53151e3b9affb49b7dd075e7da743174672c014d
 	else{
 		res.writeHead(200,{"Content-Type":"text/html;charset=UTF-8"});
 			//加载的数据结束
@@ -83,7 +124,11 @@ function getKline(symbol) {
     return new Promise((resolve, reject) => {
         let err = {"status":"error"};
         let kline = '';
+<<<<<<< HEAD
         https.get('https://api.huobi.br.com/market/history/kline?period=5min&size=12&symbol='+symbol, (res) => {
+=======
+        https.get('https://api.huobi.br.com/market/history/kline?period=5min&size=20&symbol='+symbol, (res) => {
+>>>>>>> 53151e3b9affb49b7dd075e7da743174672c014d
         // console.log('状态码:', res.statusCode);
         // console.log('请求头:', res.headers);
             res.on('data', (d) => {
@@ -130,7 +175,10 @@ function get_arr(symbol,kline){ //通过k线序列计算出数组，在前端页
         list.push(kline[i].amount) //amount
     }
     let close0 = kline[0].close;
+<<<<<<< HEAD
     // console.log('close0',close0);
+=======
+>>>>>>> 53151e3b9affb49b7dd075e7da743174672c014d
     let close1 = kline[1].close;
     // console.log(Indicator.SMA(list, 5));
     // console.log(macd(list, 26, 12, 9));
