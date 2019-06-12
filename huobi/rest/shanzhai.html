@@ -40,8 +40,8 @@
            <td>{{x.symbol}}</td>
            <td>{{x.close0 }}</td>
            <td>{{x.close1|number:2}}</td>
-           <td>{{x.avg_vol|number:2}}</td>
-           <td>{{x.vol|number:2}}</td>
+           <td>{{x.avg|number:2}}</td>
+           <td>{{x.vol_1|number:2}}</td>
            <td ng-class='{sky:{{x.bs > 10}}}'>{{x.bs|number:2}}</td>
         </tr>
   
@@ -81,10 +81,9 @@
       
       
 	  $interval(function(){
-		$http.get("http://127.0.0.1:8888/getjson")
+		$http.get("http://127.0.0.1:8888/getjson1")
 		  .success(function (response) {
-           console.log(response);
-         for(let p in response){  //   取得是key值 // console.log(obj[p]);//取得是value值
+         for(let p in response){  // console.log(p);//   取得是key值 // console.log(obj[p]);//取得是value值
                if(response[p].bs > 8){ 
 
                   if(audio.paused){

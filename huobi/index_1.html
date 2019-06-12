@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="https://cdn.bootcss.com/angular.js/1.6.3/angular.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">  
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<style>
+	.sky {
+		color:red;
+		background-color:lightblue;
+		padding:20px;
+		font-family:"Courier New";
+	}
+	</style>
+</head>
+<body>
+<!-- <audio controls>
+
+    <source src="kll.mp3" type="audio/mpeg">
+  您的浏览器不支持 audio 元素。
+  </audio> -->
+
+  <div ng-app="myApp" ng-controller="customersCtrl"> 
+    <audio id = "qAudio" controls="controls" ng-click="playQAudio()" ng-src="http://music.163.com/song/media/outer/url?id=476592630.mp3" type="audio/mpeg" ></audio>
+
+    <table class="table">
+       <caption>数字货币行情监控</caption>
+      <thead>
+         <tr>
+            <th>币种</th>
+            <th>当前价格</th>
+            <th>前M1收盘价</th>
+            <th>前平均成交量</th>
+            <th>前M1成交量</th>
+            <th>成交量倍数</th>
+         </tr>
+      </thead>
+      <tbody ng-repeat="(x,y) in map"
+         <tr>
+            <td>{{x}}</td>
+            <td>{{y.close0}}</td>
+            <td>{{y.close1}}</td>
+            <td>{{y.avg_vol}}</td>
+            <td>{{y.vol}}</td>
+            <td ng-class='{sky:{{y.bs > 8}}}'>{{y.bs}}</td>
+         </tr>
+   
+      </tbody>
+   </table>
+   </div>
+    
+   <script>
+   var app = angular.module('myApp', []);
+   app.controller('customersCtrl', function($scope, $http,$interval) {
+    //    let audio = new Audio();
+    //    audio.controls = true; //显示
+    //    audio.src = 'kkl.mp3';
+    //    audio.play(); //播放
+    let audio = document.getElementById("qAudio");
+    $scope.playQAudio = function () {   
+        audio.load();
+        audio.play();
+    };
+       $scope.breakup = true;
+       $interval(function(){
+
+         //  if(audio.paused){
+         //    audio.load();
+         //    audio.play();
+         //  }
+           $http.get("http://127.0.0.1:8888/getjson")
+           .then(function (result) {
+            let obj = result.data;
+            for(let p in obj){  // console.log(p);//   取得是key值 // console.log(obj[p]);//取得是value值
+               if(obj[p].bs > 10 && audio.paused){ 
+                  console.log("触发条件");
+                  audio.load();
+                  audio.play();
+               }                  
+            }
+          
+            $scope.map = obj;
+ 
+           });
+           
+       },3000)// end for interval
+   
+   });
+   </script>

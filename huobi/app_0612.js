@@ -4,12 +4,12 @@ let url = require('url');
 const ws = require('./crawler/ws');
 
 let syms = ['eosusdt','btcusdt','ethusdt','ltcusdt','bsvusdt','trxusdt','xrpusdt','htusdt','iotausdt'];
-let [data,vol,close0,TO_HTML] = [{},{},{},{}]
+let [data,vol,close0] = [{},{},{}];
+let TO_HTML = [];
 for(let i = 0;i<syms.length;i++){
     data[syms[i]] = []; 
     vol[syms[i]] = 0; 
     close0[syms[i]] = 0; 
-    TO_HTML[syms[i]] = {};
 }
  
 // 创建服务器
@@ -18,10 +18,10 @@ http.createServer( function (request, response) {
    var pathname = url.parse(request.url).pathname;
    
    // 输出请求的文件名
-   console.log("Request for " + pathname + " received.");
+//    console.log("Request for " + pathname + " received.");
    
-   let comm =  pathname.substr(1);
-   if(comm == 'getjson'){
+//    let comm =  pathname.substr(1);
+   if(request.url == "/getjson"){
 	   response.writeHead(200, {'Content-Type': 'application/json'});
 	   response.end(JSON.stringify(TO_HTML));
 	   //console.log("getjson",JSON.stringify(TO_HTML));
@@ -40,6 +40,7 @@ http.createServer( function (request, response) {
 
 check();
 function check() {
+	TO_HTML = [];
     
     // let symbol = 'btcusdt';
     // 检查rest行情和ws行情是否一致并打印
@@ -76,24 +77,25 @@ function check() {
 	}
 	for(let i = 0;i < syms.length;i++)
 	{
-		let N  = 7
+		let N  = 3;
 		if(data[syms[i]].length == N){
 			data[syms[i]].pop();
 		}
 		if(data[syms[i]].length >= N-1){
-			let result= {close0:0,close1:0,avg_vol:0,vol:0,bs:0}
+			let result= {symbol:'',close0:0,close1:0,avg_vol:0,vol:0,bs:0}
 			let bs = data[syms[i]][0].vol/get_vol_avg(data[syms[i]]);
 			result.close0 = close0[syms[i]];
 			result.close1 = data[syms[i]][0].price;
 			result.avg_vol = get_vol_avg(data[syms[i]]);
 			result.vol = data[syms[i]][0].vol;
-			result.bs = bs;
-			TO_HTML[syms[i]] = result;
+            result.bs = bs;
+            result.symbol = syms[i];
+			TO_HTML.push(result);
 		}
 	}
 
 
-    //console.log('TO_HTML',TO_HTML);
+    // console.log('TO_HTML',TO_HTML);
 
     //console.log('============ Check End =============');
     setTimeout(check, 3000);
