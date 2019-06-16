@@ -90,7 +90,8 @@ function getKline(symbol) {
     return new Promise((resolve, reject) => {
         let err = {"status":"error"};
         let kline = '';
-        https.get('https://api.huobi.br.com/market/history/kline?period=5min&size=12&symbol='+symbol, (res) => {
+        
+        https.get('https://api.huobi.br.com/market/history/kline?period=5min&size=2&symbol='+symbol, (res) => {
         // console.log('状态码:', res.statusCode);
         // console.log('请求头:', res.headers);
             res.on('data', (d) => {
