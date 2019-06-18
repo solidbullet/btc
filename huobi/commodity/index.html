@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title>数字货币监视系统</title>
+      <title>期货监视系统</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
       <!-- 引入 Bootstrap -->
       <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -20,14 +20,14 @@
    </head>
    <body>
    <div class = "container" ng-app="myApp" ng-controller="siteCtrl">
-      <audio id = "qAudio" controls="controls" ng-click="playQAudio()" ng-src="http://music.163.com/song/media/outer/url?id=476592630.mp3" type="audio/mpeg" ></audio>
+      <audio id = "qAudio" controls="controls" ng-click="playQAudio()" ng-src="http://music.163.com/song/media/outer/url?id=32083133.mp3" type="audio/mpeg" ></audio>
     <!-- <h3>当前k线是前面5根k线成交量的倍数: <span class="bs">{{bs}}</span> </h3>
     <h3><small>   成交量: {{vol}}</small>           <small>当前价格: {{price}}</small></h3> -->
     <table class="table">
-      <caption>数字货币行情监控</caption>
+      <caption>期货行情监控</caption>
      <thead>
         <tr>
-           <th>币种</th>
+           <th>品种</th>
            <th>当前价格</th>
            <th>前M5收盘价</th>
            <th>前12根K平均成交量</th>
@@ -45,7 +45,7 @@
            <td>{{x.avg|number:2}}</td>
            <td>{{x.vol_1|number:2}}</td>
            <td>{{(x.vol_1 * x.close1)/10000|number:2 |currency:'￥'}}</td>
-           <td ng-class='{sky:{{x.bs > 10}}}'>{{x.bs|number:2}}</td>
+           <td ng-class='{sky:{{x.bs > 5}}}'>{{x.bs|number:2}}</td>
            <td>{{x.diff|number:2}}</td>
         </tr>
   
@@ -85,10 +85,10 @@
       
       
 	  $interval(function(){
-		$http.get("http://127.0.0.1:8080/getjson")
+		$http.get("http://127.0.0.1:8888/getjson")
 		  .success(function (response) {
          for(let p in response){  // console.log(p);//   取得是key值 // console.log(obj[p]);//取得是value值
-               if(response[p].diff > 8 || response[p].bs> 5 ){ 
+               if(response[p].diff > 4 || response[p].bs> 4 ){ 
 
                   if(audio.paused){
                      audio.load();

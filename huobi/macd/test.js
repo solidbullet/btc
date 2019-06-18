@@ -8,23 +8,24 @@ const average = arr => arr.reduce((acc, val) => acc + val, 0) / arr.length;
 
 get_kline('btcusdt').then(data => {
         //return  data;
+
         let close = [];
         // for(let i =0;i<)
         for(let i in data){
-            close.push(Math.abs(data[i].close - data[i].open));
+            close.push(data[i].close);
         }
-        // let MACD = ta.MACD(close,12,26,9);
-        // let dif = MACD.macd;
-        // let dea = MACD.signal;
-        // let macd = MACD.histogram.map((x)=> x*2);
+       
+        let MACD = ta.MACD(close,12,26,9);
+        let dif = MACD.macd;
+        let dea = MACD.signal;
+        let macd = MACD.histogram.map((x)=> x*2);
+        console.log(dif);
 
-        let res = BREAKUP(close);
-        console.log(res);
     })//.then(data=>console.log(data))
     
 function get_kline(symbol) {
     return new Promise(resolve => {
-        let url = `${BASE_URL}/market/history/kline?period=15min&size=10&symbol=${symbol}`;
+        let url = `${BASE_URL}/market/history/kline?period=5min&size=150&symbol=${symbol}`;
         // console.log(url);
         http.get(url, {
             timeout: 3000,

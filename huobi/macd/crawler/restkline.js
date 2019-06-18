@@ -1,6 +1,7 @@
 const moment = require('moment');
 const http = require('../framework/httpClient');
 const Promise = require('bluebird');
+const ta = require('ta-lib');
 
 // const BASE_URL = 'https://api.huobi.pro';
 // 此地址用于国内不翻墙调试
@@ -22,7 +23,7 @@ function handle(symbol, kline) {
 
 function get_kline(symbol) {
     return new Promise(resolve => {
-        let url = `${BASE_URL}/market/history/kline?period=5min&size=12&symbol=${symbol}`;
+        let url = `${BASE_URL}/market/history/kline?period=5min&size=150&symbol=${symbol}`;
         // console.log(url);
         http.get(url, {
             timeout: 3000,
@@ -32,7 +33,18 @@ function get_kline(symbol) {
             let json = JSON.parse(data);
             let t = json.ts;
             let kline = json.data;
-            handle(symbol, kline);
+            let close = [];
+            // for(let i =0;i<)
+            for(let i in kline){
+                close.push(kline[i].close);
+            }
+            
+            let MACD = ta.MACD(close,12,26,9);
+            let dif = MACD.macd.slice(0,5);
+            let dea = MACD.signal.slice(0,5);
+            let macd = MACD.histogram.map((x)=> x*2).slice(0,5);
+            console.log(macd);
+            // handle(symbol, kline);
             resolve(null);
         }).catch(ex => {
             console.log('http请求 .catch is: ',symbol, ex);
@@ -44,7 +56,7 @@ function get_kline(symbol) {
 function run() {
     // console.log(`run ${moment()}`);
 
-    let list = ['eosusdt','btcusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt'];
+    let list = ['eosusdt','btcusdt'];//,'bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt'
     Promise.map(list, item => {
         return get_kline(item);
     }).then(() => {

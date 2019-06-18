@@ -1,3 +1,47 @@
-let a = '{"status":"ok","ch":"market.eosusdt.kline.5min","ts":1560318019687,"data":[{"id":1560318000,"open":6.302200000000000000,"close":6.299800000000000000,"low":6.298300000000000000,"high":6.304600000000000000,"amount":1176.500900000000000000,"vol":7412.566209890000000000000000000000000000,"count":30},{"id":1560317700,"open":6.303300000000000000,"close":6.298600000000000000,"low":6.280100000000000000,"high":6.310000000000000000,"amount":53466.694678104065531899,"vol":336503.734338219999999658638800000000000000,"count":715},{"id":1560317400,"open":6.315000000000000000,"close":6.300000000000000000,"low":6.300000000000000000,"high":6.319100000000000000,"amount":47937.394183420628671970,"vol":302433.542766480143761560974000000000000000,"count":292}]}';
-let b = a.substr(0,1);
-console.log(b=='{');
+const http = require('http');
+const fs = require('fs');
+
+
+// async function get_all () {
+//     let symbol = ['eosusdt','btcusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt'];//,'htusdt','bsvusdt','ltcusdt','trxusdt'
+//     let TO_HTML = [];
+//     let kl_promise=[];
+//     for(let i = 0;i <symbol.length;i++){
+//         kl_promise.push(getKline(symbol[i]));
+//     };
+//     let res = await Promise.all(kl_promise);
+//     return res;
+// }
+
+// get_all().then((res) => {
+//     console.log(res)
+// });
+
+// getKline('btcusdt').then((res)=>{
+//     console.log(res)
+// })
+function getKline(symbol) {
+    return new Promise((resolve, reject) => {
+        let err = {"status":"error"};
+        let kline = '';
+        http.get('http://stock2.finance.sina.com.cn/futures/api/json.php/IndexService.getInnerFuturesMiniKLine5m?symbol='+symbol, (res) => {
+        // console.log('状态码:', res.statusCode);
+        // console.log('请求头:', res.headers);
+            res.on('data', (d) => {
+              kline += d;
+            //   console.log(d);
+            });
+            res.on("end",()=>{
+                console.log(Object.keys(JSON.parse(kline)).length);
+                resolve(JSON.parse(kline));
+                // resolve(kline);//JSON.parse(kline)
+            })
+        })
+        // reject(err);
+    })
+}
+
+getKline('TA1909')
+
+
+
