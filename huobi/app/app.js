@@ -1,5 +1,5 @@
 //引入模块
-const ws = require('../crawler/ws');
+// const ws = require('../crawler/ws');
 
 const http =require("http");
 //引入文件模块
@@ -38,42 +38,42 @@ const server = http.createServer(function(req,res){
 			//加载的数据结束
 			res.end('<h1> 所需内容未找到404 </h1>');
 	}
-}).listen(8888)
-console.log('http://127.0.0.1:8888')
+}).listen(8080)
+console.log('http://127.0.0.1:8080')
 //监听端口
 
-function check() {
-    let symbol = 'btcusdt';
-    // 检查rest行情和ws行情是否一致并打印
-    // console.log('ws',JSON.stringify(ws.OrderBook));
-    // console.log('rest',JSON.stringify(rest.OrderBook));
-    console.log('============ Check Start =============');
-    orderbook = ws.OrderBook[symbol];
-    if(orderbook)
-    {
-        let id = orderbook.id;
-		let close1 = orderbook.close;
-		close0 = orderbook.close;
-        vol_1 = (orderbook.amount > vol_1)?orderbook.amount:vol_1; //每一跳成交量都会变化，记录一分钟k最大的成交量
-        console.log("vol: ",orderbook.amount);
-        if(klines.length == 0 || klines[0].id != orderbook.id)
-        {
-            let obj = arrpush(id,close1,vol_1);
-            klines.unshift(obj);
-            vol_1 = 0;//1分钟k线成交量归零
-        }
-    }
-    if(klines.length ==4)
-    {
-        klines.pop();
-    }
-    console.log(klines);
+// function check() {
+//     let symbol = 'btcusdt';
+//     // 检查rest行情和ws行情是否一致并打印
+//     // console.log('ws',JSON.stringify(ws.OrderBook));
+//     // console.log('rest',JSON.stringify(rest.OrderBook));
+//     console.log('============ Check Start =============');
+//     orderbook = ws.OrderBook[symbol];
+//     if(orderbook)
+//     {
+//         let id = orderbook.id;
+// 		let close1 = orderbook.close;
+// 		close0 = orderbook.close;
+//         vol_1 = (orderbook.amount > vol_1)?orderbook.amount:vol_1; //每一跳成交量都会变化，记录一分钟k最大的成交量
+//         console.log("vol: ",orderbook.amount);
+//         if(klines.length == 0 || klines[0].id != orderbook.id)
+//         {
+//             let obj = arrpush(id,close1,vol_1);
+//             klines.unshift(obj);
+//             vol_1 = 0;//1分钟k线成交量归零
+//         }
+//     }
+//     if(klines.length ==4)
+//     {
+//         klines.pop();
+//     }
+//     console.log(klines);
 
-    console.log('============ Check End =============');
-    setTimeout(check, 1000);
-}
+//     console.log('============ Check End =============');
+//     setTimeout(check, 1000);
+// }
 
-setTimeout(check, 2000);
+// setTimeout(check, 2000);
 
 function arrpush(i,p,v)
 {

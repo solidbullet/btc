@@ -20,40 +20,38 @@
    </head>
    <body>
    <div class = "container" ng-app="myApp" ng-controller="siteCtrl">
-
+      <audio id = "qAudio" controls="controls"  ng-src="http://music.163.com/song/media/outer/url?id=476592630.mp3" type="audio/mpeg" ></audio>
     <!-- <h3>当前k线是前面5根k线成交量的倍数: <span class="bs">{{bs}}</span> </h3>
     <h3><small>   成交量: {{vol}}</small>           <small>当前价格: {{price}}</small></h3> -->
+    <div ng-click="pauseQAudio()">停止</div> 
+    <div ng-click="playQAudio()">触发</div>
     <table class="table">
-            <caption>监控成交量是否暴增</caption>
-           <thead>
-              <tr>
-                 <th>币种</th>
-                 <th>实时价格</th>
-                 <th>M1_CLOSE_PRICE</th>
-                 <th>N5平均成交量</th>
-                 <th>当前成交量</th>
-                 <th>倍数</th>
-              </tr>
-           </thead>
-           <tbody>
-              <tr>
-                 <td>{{symbol}}</td>
-                 <td class="close0">{{close0}}</td>
-                 <td>{{close1}}</td>
-                 <td>{{vol_n5}}</td>
-                 <td>{{vol_1}}</td>
-                 <td>{{bs}}</td>
-              </tr>
-              <tr>
-                 <td>{{symbol}}</td>
-                 <td class="close0">{{close0}}</td>
-                 <td>{{close1}}</td>
-                 <td>{{vol_n5}}</td>
-                 <td>{{vol_1}}</td>
-                 <td>{{bs}}</td>
-              </tr>
-           </tbody>
-        </table>
+      <caption >数字货币行情监控</caption>
+     <thead>
+        <tr>
+           <th>币种</th>
+           <th>当前价格</th>
+        </tr>
+     </thead>
+     <tbody ng-repeat="x in data|orderBy:'diff':'desc'">
+      <tr>
+         <td>{{x.name}}</td>
+         <td ng-click="test(x.name)" type="button">{{x.swift }}</td>
+         </tr>
+
+   </tbody>
+
+  </table>
+
+  <table class="table">
+  <thead>
+     <tr>
+        <th>币种</th>
+        <th>记录</th>
+     </tr>
+  </thead>
+
+</table>
 
     </div>
       <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
@@ -63,20 +61,31 @@
    </body>
    
     <script>
-	var app = angular.module('myApp', []);
+   var app = angular.module('myApp', []);
+   let audio = document.getElementById("qAudio");
+   let audio_swift = 0;
 	app.controller('siteCtrl', function($scope, $http,$interval) {
-	  $interval(function(){
-		$http.get("http://127.0.0.1:8888/getjson")
-		  .success(function (response) {
-            $scope.symbol = response.symbol;  
-            $scope.close0 = response.close0;
-            $scope.close1 = response.close1;
-            $scope.vol_n5 = response.vol_n5;
-            $scope.vol_1 = response.vol_1;
-            $scope.bs = response.bs;
-		  });//end for http.get
-	  },800)// end for interval
-	  
+      $scope.data = [{name:'jyq',swift:'暂停'},{name:'bxm',swift:'暂停'}];
+      $scope.control ={'jyq':true,'bxm':true};
+
+      $scope.pauseQAudio = function(){
+
+         audio.pause();
+      };
+      $scope.playQAudio = function(){
+
+         if($scope.control['jyq']) audio.play();
+      };
+      $scope.test = function(x){
+         audio.pause();
+         $scope.control[x] = !$scope.control[x]; 
+         // console.log($scope.control);
+      }
+      // if(audio.paused){
+      //    audio.load();
+      //    audio.play();
+      // }
+
 	});
 	</script>
 </html>
