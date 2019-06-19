@@ -10,7 +10,7 @@ const server = http.createServer(function(req,res){
 	res.writeHead(200,{"Content-Type":"text/html;charset=UTF-8"})
 	//请求的路由地址
 	if(req.url == "/" || req.url=="/index.html"){
-		fs.readFile("./index.html",'utf-8',function(err,data){
+		fs.readFile("./commodity/index.html",'utf-8',function(err,data){
             if(err)
             {
                 console.log(err);
@@ -36,4 +36,4 @@ const server = http.createServer(function(req,res){
 			res.end('<h1> 所需内容未找到404 </h1>');
 	}
 }).listen(8888)
-console.log('http://127.0.0.1:88888')
+console.log('http://127.0.0.1:8888')

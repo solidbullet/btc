@@ -1,7 +1,7 @@
 let http = require('http');
 let fs = require('fs');
 let url = require('url');
-const ws = require('../crawler/restkline');
+const ws = require('./crawler/restkline');
 
 
 
@@ -20,7 +20,7 @@ const server = http.createServer(function(req,res){
 		})
 
     }else if(req.url == "/getjson"){
-      let symbol = ['eosusdt','btcusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt'];//,'htusdt','bsvusdt','ltcusdt','trxusdt'
+      let symbol = ['eosusdt','btcusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt','irisusdt','rsrusdt'];//,'htusdt','bsvusdt','ltcusdt','trxusdt'
       let TO_HTML = [];
       for(let i = 0;i<symbol.length;i++){
             let orderbook = ws.OrderBook[symbol[i]];

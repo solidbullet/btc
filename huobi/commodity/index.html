@@ -14,7 +14,9 @@
       <![endif]-->
       <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
       <style>
-          .close0{font-weight:bold;color: red;font-size:1.2em;}
+         .close0{font-weight:bold;color: green;font-size:1.2em;}
+          .diff{font-weight:bold;color: red;font-size:1.2em;}
+          .sky {color:red;background-color:lightblue;	padding:20px;font-family:"Courier New";}
       </style>
 
    </head>
@@ -27,26 +29,28 @@
       <caption>期货行情监控</caption>
      <thead>
         <tr>
-           <th>品种</th>
-           <th>当前价格</th>
-           <th>前M5收盘价</th>
-           <th>前12根K平均成交量</th>
-           <th>前M5成交量</th>
-           <th>前M5成交金额(万)</th>
-           <th>成交量倍数</th>
-           <th>突破强度</th>
+         <th>品种</th>
+         <th>当前价格</th>
+         <th>突破强度</th>
+         <th>现价-M5收盘</th>
+         <th>成交量倍数</th>
+         <th>前M5收盘价</th>
+         <th>前12根K平均成交量</th>
+         <th>前M5成交量</th>
+         <th>前M5成交金额(万)</th>
         </tr>
      </thead>
      <tbody ng-repeat="x in data|orderBy:'diff':'desc'">
         <tr>
-           <td>{{x.symbol}}</td>
-           <td class ='close0'>{{x.close0 }}</td>
-           <td>{{x.close1|number:2}}</td>
-           <td>{{x.avg|number:2}}</td>
-           <td>{{x.vol_1|number:2}}</td>
-           <td>{{(x.vol_1 * x.close1)/10000|number:2 |currency:'￥'}}</td>
-           <td ng-class='{sky:{{x.bs > 5}}}'>{{x.bs|number:2}}</td>
-           <td>{{x.diff|number:2}}</td>
+         <td class ='close0'>{{x.symbol}}</td>
+         <td class ='close0'>{{x.close0 |number:4}}</td>
+         <td class ='diff'>{{x.diff|number:2}}</td>
+         <td>{{x.close0 - x.close1 |number:4}}</td>
+         <td ng-class='{sky:{{x.bs > 5}}}' style="font-size:1.2em;color:darkviolet;font-weight:bold">{{x.bs|number:2}}</td>
+         <td>{{x.close1|number:4}}</td>
+         <td>{{x.avg|number:2}}</td>
+         <td>{{x.vol_1|number:2}}</td>
+         <td>{{(x.vol_1 * x.close1)/10000|number:2 |currency:'￥'}}</td>
         </tr>
   
      </tbody>
