@@ -10,7 +10,7 @@ const server = http.createServer(function(req,res){
 	res.writeHead(200,{"Content-Type":"text/html;charset=UTF-8"})
 	//请求的路由地址
 	if(req.url == "/" || req.url=="/index.html"){
-		fs.readFile("./commodity/index.html",'utf-8',function(err,data){
+		fs.readFile("./index.html",'utf-8',function(err,data){
             if(err)
             {
                 console.log(err);

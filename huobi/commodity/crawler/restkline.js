@@ -79,11 +79,9 @@ function get_arr(symbol,kline){ //通过k线序列计算出数组，在前端页
     // console.log(macd(list, 26, 12, 9));
     let list_vol_1 = list_vol.map(value => parseFloat(value));
     let vol_0 = list_vol_1.shift()
-    
     let avg = average(list_vol_1);
-    
-    let bs = list_vol[0]/avg
-    let data = {"symbol":symbol,"close0":close0,"close1":close1,"avg":avg,"vol_1":parseFloat(list_vol[0]),"bs":bs,"diff":BREAKUP(list_diff)};
+    let bs = (avg != 0 )?list_vol[0]/avg:0;
+    let data = {"symbol":symbol,"close0":close0,"close1":close1,"avg":avg,"vol_1":list_vol[0],"bs":bs,"diff":BREAKUP(list_diff),'vol_breakup':BREAKUP(list_vol)};
     return data;
 
 }

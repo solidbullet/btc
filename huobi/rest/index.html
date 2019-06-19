@@ -34,6 +34,7 @@
            <th>突破强度</th>
            <th>现价-M5收盘</th>
            <th>成交量倍数</th>
+           <th>vol突破强度</th>
            <th>前M5收盘价</th>
            <th>前12根K平均成交量</th>
            <th>前M5成交量</th>
@@ -46,9 +47,10 @@
         <tr>
            <td class ='close0'>{{x.symbol}}</td>
            <td class ='close0'>{{x.close0 |number:4}}</td>
-           <td class ='diff'>{{x.diff|number:2}}</td>
+           <td ng-class='{sky:{{x.diff > 8}}}' class ='diff'>{{x.diff|number:2}}</td>
            <td>{{x.close0 - x.close1 |number:4}}</td>
-           <td ng-class='{sky:{{x.bs > 5}}}' style="font-size:1.2em;color:darkviolet;font-weight:bold">{{x.bs|number:2}}</td>
+           <td ng-class='{sky:{{x.bs > 5}}}'>{{x.bs|number:2}}</td>
+           <td ng-class='{sky:{{x.vol_breakup > 10}}}' style="font-size:1.2em;color:darkviolet;font-weight:bold">{{x.vol_breakup|number:2}}</td>
            <td>{{x.close1|number:4}}</td>
            <td>{{x.avg|number:2}}</td>
            <td>{{x.vol_1|number:2}}</td>
@@ -96,7 +98,7 @@
 		$http.get("http://127.0.0.1:8080/getjson")
 		  .success(function (response) {
          for(let p in response){  // console.log(p);//   取得是key值 // console.log(obj[p]);//取得是value值
-               if(response[p].diff > 8 || response[p].bs> 5 ){ 
+               if(response[p].diff > 8 || response[p].bs> 5 || response[p].vol_breakup> 10){ 
 
                   if(audio.paused){
                      audio.load();
@@ -108,8 +110,9 @@
                   // console.log($scope.history[response[p].symbol]);
                   if(typeof($scope.history[response[p].symbol]) == 'undefined'){
                      h_arr.push(mytime);
-                     h_arr.push(response[p].bs);
-                     h_arr.push(response[p].diff);
+                     h_arr.push('成交量倍数:'+response[p].bs.toFixed(2));
+                     h_arr.push('价格突破强度:'+response[p].diff.toFixed(2));
+                     h_arr.push('成交量突破强度：'+response[p].vol_breakup.toFixed(2));
                      $scope.history[response[p].symbol] = h_arr;
                   }else{
                      let time_str = $scope.history[response[p].symbol][0];
