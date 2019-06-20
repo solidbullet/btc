@@ -1,7 +1,7 @@
 let http = require('http');
 let fs = require('fs');
 let url = require('url');
-const ws = require('./crawler/ws');
+const ws = require('./crawler/ws');//
 
 let syms = ['eosusdt','btcusdt','ethusdt','ltcusdt','bsvusdt','trxusdt','xrpusdt','htusdt','iotausdt'];
 let [data,vol,close0,TO_HTML] = [{},{},{},{}]
