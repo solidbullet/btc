@@ -1,4 +1,4 @@
- const compare = (dif,dea) => {
+ const IsCross = (dif,dea) => { //判断是否金叉死叉
     let res = 'Waiting';
  if(dif.length != dea.length){
      console.log('macd 的dif和dea数组长度不相等');
@@ -17,5 +17,20 @@
 
 }
 
-module.exports = compare;
+const IsBreakZero = histogram => {  //判断是否穿越零轴
+    let h0 = histogram[0];
+    histogram.shift();
+    let flag_down = histogram.every((item,index,arr) => item > 0 ) && h0 < 0; //every函数判断是不是所有的元素都大于0
+    let flag_rise = histogram.every((item,index,arr) => item < 0 ) && h0 > 0; 
+    let res = '';
+    if(flag_down){
+        res = '下穿零轴'
+    }else if(flag_rise){
+        res = '上穿零轴'
+    }else res= 'Waiting';
+    return res;
+}
+
+
+module.exports = {IsCross,IsBreakZero};
 

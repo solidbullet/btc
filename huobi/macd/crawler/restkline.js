@@ -2,7 +2,7 @@ const moment = require('moment');
 const http = require('../framework/httpClient');
 const Promise = require('bluebird');
 const ta = require('ta-lib');
-const compare = require('../indicator/fn')
+const MyIndicator = require('../indicator/fn')
 
 // const BASE_URL = 'https://api.huobi.pro';
 // 此地址用于国内不翻墙调试
@@ -13,10 +13,10 @@ var orderbook = {};
 exports.OrderBook = orderbook;
 
 
-function handle(symbol,close0,cross) {
+function handle(symbol,close0,cross,zeroAxis) {
     
     // console.log(kline);
-    let res = {symbol:symbol,close0:close0,cross:cross};
+    let res = {symbol:symbol,close0:close0,cross:cross,zeroAxis:zeroAxis};
     orderbook[symbol] = res;
     // console.log(orderbook[symbol]);
     // TODO 根据数据生成你想要的K线 or whatever...
@@ -25,7 +25,8 @@ function handle(symbol,close0,cross) {
 
 function get_kline(symbol) {
     return new Promise(resolve => {
-        let url = `${BASE_URL}/market/history/kline?period=5min&size=150&symbol=${symbol}`;
+        if(global.PeriodFromCus == undefined) global.PeriodFromCus = '60min';
+        let url = `${BASE_URL}/market/history/kline?period=${global.PeriodFromCus}&size=150&symbol=${symbol}`;
         // console.log(url);
         http.get(url, {
             timeout: 2000,
@@ -42,7 +43,7 @@ function get_kline(symbol) {
             let dea = MACD.signal.slice(0,10);
             let macd = MACD.histogram.map((x)=> x*2).slice(0,10);
             // console.log(compare(dif,dea));
-            handle(symbol, close[0],compare(dif,dea));
+            handle(symbol, close[0],MyIndicator.IsCross(dif,dea),MyIndicator.IsBreakZero(macd));
             resolve(null);
         }).catch(ex => {
             //console.log('http请求 .catch is: ',symbol, ex);

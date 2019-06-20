@@ -8,26 +8,20 @@ const ws = require('./crawler/restkline');
 const server = http.createServer(function(req,res){
 	//设置响应头
 	res.writeHead(200,{"Content-Type":"text/html;charset=UTF-8"})
+	// console.log(req.url);
 	//请求的路由地址
 	if(req.url == "/" || req.url=="/index.html"){
 		fs.readFile("./index.html",'utf-8',function(err,data){
-            if(err)
-            {
-                console.log(err);
-            } 
+            if(err) console.log(err);
 			res.writeHead(200,{"Content-Type":"text/html;charset=UTF-8"});
 			res.end(data);
 		})
 
-    }else if(req.url == "/getjson"){
+    }else if(req.url.startsWith('/getjson')){
+	  let index = req.url.indexOf("?")
+	  global.PeriodFromCus = req.url.substr(index+1);
       let symbol = ['eosusdt','btcusdt','xmrusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt','irisusdt','rsrusdt','bttusdt'];//
-    //   let TO_HTML = [];
-    //   for(let i = 0;i<symbol.length;i++){
-    //         let orderbook = ws.OrderBook[symbol[i]];
-    //         if(orderbook) TO_HTML.push(orderbook);
-	// 	}
 	  let data = symbol.map(v => ws.OrderBook[v]);
-    // console.log('hrml',TO_HTML);
       res.end(JSON.stringify(data)); 
 
 	}

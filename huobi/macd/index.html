@@ -23,8 +23,14 @@
    <body>
    <div class = "container" ng-app="myApp" ng-controller="siteCtrl">
       <audio id = "qAudio" controls="controls" ng-click="playQAudio()" ng-src="http://music.163.com/song/media/outer/url?id=476592630.mp3" type="audio/mpeg" ></audio>
-    <!-- <h3>当前k线是前面5根k线成交量的倍数: <span class="bs">{{bs}}</span> </h3>
-    <h3><small>   成交量: {{vol}}</small>           <small>当前价格: {{price}}</small></h3> -->
+
+      <form role="form">
+         <div class="form-group">
+            <label for="name">选择周期</label>
+            <select class="form-control" ng-init="selectedName = periods[2]" ng-change="selectChange();" ng-model="selectedName" ng-options="x for x in periods"></select>
+         </div>
+      </form>
+
     <table class="table">
       <caption>数字货币行情监控</caption>
      <thead>
@@ -32,6 +38,7 @@
            <th>币种</th>
            <th>当前价格</th>
            <th>M5周期金叉预警</th>
+           <th>穿越零轴预警</th>
         </tr>
      </thead>
      <tbody ng-repeat="x in data|orderBy:'diff':'desc'">
@@ -39,6 +46,7 @@
            <td class ='close0'>{{x.symbol}}</td>
            <td class ='close0'>{{x.close0 |number:4}}</td>
            <td class ='diff'>{{x.cross}}</td>
+           <td class ='diff'>{{x.zeroAxis}}</td>
         </tr>
   
      </tbody>
@@ -72,15 +80,19 @@
    var app = angular.module('myApp', []);
    let audio = document.getElementById("qAudio");
 	app.controller('siteCtrl', function($scope, $http,$interval) {
+      if($scope.selectedName == undefined) $scope.selectedName = "60min";
+      console.log($scope.selectedName);
       $scope.history = {};
-
-      
-      
+      $scope.periods = ["5min", "15min", "60min","4hour","1day"];
+      $scope.selectChange = function(){
+         console.log($scope.selectedName)
+      }
 	  $interval(function(){
-		$http.get("http://127.0.0.1:8081/getjson")
+        let url = "http://127.0.0.1:8081/getjson?"+$scope.selectedName;
+		$http.get(url)
 		  .success(function (response) {
          for(let p in response){  // console.log(p);//   取得是key值 // console.log(obj[p]);//取得是value值
-               if(response[p].cross != 'Waiting'){ 
+               if(response[p].cross != 'Waiting' || response[p].zeroAxis != 'Waiting'){ 
 
                   if(audio.paused){
                      audio.load();
@@ -93,6 +105,7 @@
                   if(typeof($scope.history[response[p].symbol]) == 'undefined'){
                      h_arr.push(mytime);
                      h_arr.push(response[p].cross);
+                     h_arr.push(response[p].zeroAxis);
                      $scope.history[response[p].symbol] = h_arr;
                   }else{
                      let time_str = $scope.history[response[p].symbol][0];
