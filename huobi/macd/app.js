@@ -20,14 +20,15 @@ const server = http.createServer(function(req,res){
 		})
 
     }else if(req.url == "/getjson"){
-      let symbol = ['eosusdt','btcusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt','irisusdt','rsrusdt','bttusdt'];//,'htusdt','bsvusdt','ltcusdt','trxusdt'
-      let TO_HTML = [];
-      for(let i = 0;i<symbol.length;i++){
-            let orderbook = ws.OrderBook[symbol[i]];
-            if(orderbook) TO_HTML.push(orderbook);
-        }
+      let symbol = ['eosusdt','btcusdt','xmrusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt','irisusdt','rsrusdt','bttusdt'];//
+    //   let TO_HTML = [];
+    //   for(let i = 0;i<symbol.length;i++){
+    //         let orderbook = ws.OrderBook[symbol[i]];
+    //         if(orderbook) TO_HTML.push(orderbook);
+	// 	}
+	  let data = symbol.map(v => ws.OrderBook[v]);
     // console.log('hrml',TO_HTML);
-      res.end(JSON.stringify(TO_HTML)); 
+      res.end(JSON.stringify(data)); 
 
 	}
 	else{
@@ -35,5 +36,5 @@ const server = http.createServer(function(req,res){
 			//加载的数据结束
 			res.end('<h1> 所需内容未找到404 </h1>');
 	}
-}).listen(8080)
-console.log('http://127.0.0.1:8080')
+}).listen(8081)
+console.log('http://127.0.0.1:8081')

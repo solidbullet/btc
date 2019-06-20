@@ -2,6 +2,7 @@ const moment = require('moment');
 const http = require('../framework/httpClient');
 const Promise = require('bluebird');
 const ta = require('ta-lib');
+const compare = require('../indicator/fn')
 
 // const BASE_URL = 'https://api.huobi.pro';
 // 此地址用于国内不翻墙调试
@@ -12,10 +13,11 @@ var orderbook = {};
 exports.OrderBook = orderbook;
 
 
-function handle(symbol, kline) {
+function handle(symbol,close0,cross) {
     
     // console.log(kline);
-    orderbook[symbol] = get_arr(symbol,kline);
+    let res = {symbol:symbol,close0:close0,cross:cross};
+    orderbook[symbol] = res;
     // console.log(orderbook[symbol]);
     // TODO 根据数据生成你想要的K线 or whatever...
     // TODO 记录数据到你的数据库或者Redis
@@ -26,28 +28,24 @@ function get_kline(symbol) {
         let url = `${BASE_URL}/market/history/kline?period=5min&size=150&symbol=${symbol}`;
         // console.log(url);
         http.get(url, {
-            timeout: 3000,
+            timeout: 2000,
             gzip: true
         }).then(data => {
             // console.log(data);
             let json = JSON.parse(data);
             let t = json.ts;
             let kline = json.data;
-            let close = [];
-            // for(let i =0;i<)
-            for(let i in kline){
-                close.push(kline[i].close);
-            }
+            let close = kline.map(v => v.close)
             
             let MACD = ta.MACD(close,12,26,9);
-            let dif = MACD.macd.slice(0,5);
-            let dea = MACD.signal.slice(0,5);
-            let macd = MACD.histogram.map((x)=> x*2).slice(0,5);
-            console.log(macd);
-            // handle(symbol, kline);
+            let dif = MACD.macd.slice(0,10);
+            let dea = MACD.signal.slice(0,10);
+            let macd = MACD.histogram.map((x)=> x*2).slice(0,10);
+            // console.log(compare(dif,dea));
+            handle(symbol, close[0],compare(dif,dea));
             resolve(null);
         }).catch(ex => {
-            console.log('http请求 .catch is: ',symbol, ex);
+            //console.log('http请求 .catch is: ',symbol, ex);
             resolve(null);
         });
     });
@@ -56,17 +54,12 @@ function get_kline(symbol) {
 function run() {
     // console.log(`run ${moment()}`);
 
-    let list = ['eosusdt','btcusdt'];//,'bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt'
+    let list = ['eosusdt','btcusdt','xmrusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt','irisusdt','rsrusdt','bttusdt'];
     Promise.map(list, item => {
         return get_kline(item);
     }).then(() => {
         setTimeout(run, 2000);
     });
-
-    // get_kline('btcusdt').then(data => {
-    //        //return  data;
-    //        console.log(data);
-    //     })//.then(data=>console.log(data))
 }
 
 run();

@@ -1,5 +1,5 @@
  const compare = (dif,dea) => {
-    let res = '';
+    let res = 'Waiting';
  if(dif.length != dea.length){
      console.log('macd 的dif和dea数组长度不相等');
  }else{ //第二位到最后一位两个数组比较，全部小于的话就+1，全部大于的话就-1，累计数值跟len比较

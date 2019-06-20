@@ -35,7 +35,7 @@ function get_kline(symbol) {
             handle(symbol, kline);
             resolve(null);
         }).catch(ex => {
-            console.log('http请求 .catch is: ',symbol, ex);
+            // console.log('http请求 .catch is: ',symbol, ex);
             resolve(null);
         });
     });
@@ -44,7 +44,7 @@ function get_kline(symbol) {
 function run() {
     // console.log(`run ${moment()}`);
 
-    let list = ['eosusdt','btcusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt','irisusdt','rsrusdt','bttusdt'];
+    let list = ['eosusdt','btcusdt','xmrusdt','bsvusdt','ltcusdt','trxusdt','ethusdt','atomusdt','irisusdt','rsrusdt','bttusdt'];
     Promise.map(list, item => {
         return get_kline(item);
     }).then(() => {
