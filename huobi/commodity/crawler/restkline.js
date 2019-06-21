@@ -1,6 +1,7 @@
 const moment = require('moment');
 const http = require('../framework/httpClient');
 const Promise = require('bluebird');
+const timeblock  = require('../tools/TimeBlock');
 
 // const BASE_URL = 'http://stock2.finance.sina.com.cn/futures/api/json.php';
 // 此地址用于国内不翻墙调试
@@ -16,9 +17,8 @@ exports.OrderBook = orderbook;
 
 function handle(symbol, kline) {
     
-    // console.log(kline);
     orderbook[symbol] = get_arr(symbol,kline);
-    // console.log(orderbook[symbol]);
+    console.log(orderbook[symbol]);
     // TODO 根据数据生成你想要的K线 or whatever...
     // TODO 记录数据到你的数据库或者Redis
 }
@@ -38,7 +38,7 @@ function get_kline(symbol) {
             handle(symbol, json);
             resolve(null);
         }).catch(ex => {
-            console.log('http请求 .catch is: ',symbol, ex);
+            // console.log('http请求 .catch is: ',symbol, ex);
             resolve(null);
         });
     });
@@ -60,7 +60,10 @@ function run() {
     //     })//.then(data=>console.log(data))
 }
 
-run();
+let date = new Date();
+// let time_test = '2019-06-21 15:14:00';
+// let date0 = new Date(time_test);
+if(timeblock.onMonitor(date)) run();
 
 function get_arr(symbol,kline){ //通过k线序列计算出数组，在前端页面展示
     

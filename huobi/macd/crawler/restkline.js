@@ -2,7 +2,7 @@ const moment = require('moment');
 const http = require('../framework/httpClient');
 const Promise = require('bluebird');
 const ta = require('ta-lib');
-const MyIndicator = require('../indicator/fn')
+const MyIndicator = require('../indicator/MacdCross')
 
 // const BASE_URL = 'https://api.huobi.pro';
 // 此地址用于国内不翻墙调试
