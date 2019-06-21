@@ -3,6 +3,12 @@ const http = require('../framework/httpClient');
 const Promise = require('bluebird');
 const timeblock  = require('../tools/TimeBlock');
 
+
+let date = new Date();
+// let time_test = '2019-06-21 14:14:00';
+// let date0 = new Date(time_test);
+if(!timeblock.onMonitor(date)) return;
+
 // const BASE_URL = 'http://stock2.finance.sina.com.cn/futures/api/json.php';
 // 此地址用于国内不翻墙调试
 const BASE_URL = 'http://stock2.finance.sina.com.cn/futures/api/json.php';
@@ -18,9 +24,7 @@ exports.OrderBook = orderbook;
 function handle(symbol, kline) {
     
     orderbook[symbol] = get_arr(symbol,kline);
-    console.log(orderbook[symbol]);
-    // TODO 根据数据生成你想要的K线 or whatever...
-    // TODO 记录数据到你的数据库或者Redis
+    // console.log(orderbook[symbol])
 }
 
 function get_kline(symbol) {
@@ -46,24 +50,19 @@ function get_kline(symbol) {
 
 function run() {
     // console.log(`run ${moment()}`);
-
     let list = ['TA1909','RB1909','EG1909'];
     Promise.map(list, item => {
         return get_kline(item);
     }).then(() => {
         setTimeout(run, 2000);
     });
-
     // get_kline('btcusdt').then(data => {
     //        //return  data;
     //        console.log(data);
     //     })//.then(data=>console.log(data))
 }
 
-let date = new Date();
-// let time_test = '2019-06-21 15:14:00';
-// let date0 = new Date(time_test);
-if(timeblock.onMonitor(date)) run();
+run();
 
 function get_arr(symbol,kline){ //通过k线序列计算出数组，在前端页面展示
     
@@ -107,5 +106,4 @@ var BREAKUP = list =>{ //计算：最近K线实体长度/前面11根K线实体�
     if (result != 0) ratio = diff0/result;
     // console.log(ratio,'result',result,'diffo',diff0);
     return ratio;
-
 }
