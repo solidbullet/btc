@@ -13,7 +13,7 @@
     "@alicloud/pop-core": "^1.7.7",
     "alidayu-node": "^1.0.3",
     "bluebird": "^3.3.1",
-    "config": "^1.28.1",
+    "config": "^3.3.8",
     "crypto-js": "^3.1.9-1",
     "jsrsasign": "^8.0.12",
     "macd": "^1.0.2",
